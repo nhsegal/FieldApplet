@@ -36,7 +36,7 @@ function setup() {
 }
 
 function draw() {
-  //chargeValSlider.mouseReleased(numCheck);
+ 
   background(255);
   rect(0,0,width-1,height-1);
   myFunction();
@@ -191,6 +191,11 @@ function visualization(a) {
 
 function numCheck(){
   sliderValue = chargeValSlider.value()/10;
+  var e = document.getElementById("menu2");
+  if (e.options[e.selectedIndex].value == 2)
+    {
+      tests = [];
+    };
 }
 
 
@@ -207,7 +212,7 @@ function myFunction2() {
 
 function resetFunction() {
   var e = document.getElementById("menu2");
-  if (e.options[e.selectedIndex].value == 0){
+  if (e.options[e.selectedIndex].value == 0 || e.options[e.selectedIndex].value == 2){
     tests = [];
   }    
 
@@ -220,7 +225,7 @@ function mouseClicked() {
   if (e.options[e.selectedIndex].value == 0){
     tests.push(new testCharge(mouseX, mouseY));
   }  
-  if (e.options[e.selectedIndex].value == 2){  
+  if ((e.options[e.selectedIndex].value == 2) && (mouseX < width) && (mouseX > 0) && (mouseY < height) && (mouseY > 0) ){  
     tests.push(new testCharge(mouseX, mouseY));
     fieldline(mouseX, mouseY);
   } 
