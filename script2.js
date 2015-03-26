@@ -1,3 +1,6 @@
+var chargeValSlider;
+
+//arrays
 var sources = [];
 var tests = [];
 var arrows = [];
@@ -11,7 +14,17 @@ var r; //PVector
 var sliderValue = 1;
 
 function setup() {
-  createCanvas(1000, 400);
+  var cnv = createCanvas(1000, 400);
+  cnv.parent("myContainer");
+
+
+  chargeValSlider = createSlider( 3, 17, 9);
+  chargeValSlider.parent("sliderPos");
+  chargeValSlider.size(240);  
+
+
+
+
   smooth();
   chargeArrangement(1);
   mouse = createVector(mouseX, mouseY);
@@ -22,7 +35,7 @@ function setup() {
 
 function draw() {
   background(200);
-
+  //myFunction();
   for (var k = 0; k < sources.length; k++) {
     sources[k].display();
   }
@@ -169,4 +182,10 @@ function visualization(a) {
     tests = [];
     tests.push(new testCharge(mouseX, mouseY));
   }
+}
+
+
+function myFunction() {
+  var e = document.getElementById("menu1");
+  chargeArrangement(e.options[e.selectedIndex].value);
 }
