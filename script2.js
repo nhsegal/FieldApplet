@@ -1,5 +1,5 @@
 var chargeValSlider;
-var f = 0; //previous visualization setting
+ //previous visualization setting
 //arrays
 var sources = [];
 var tests = [];
@@ -184,11 +184,7 @@ function visualization(a) {
 
   //mouse
   if (a == 0) {
-      var e = document.getElementById("menu1");
-     /* if (f !=  0) {
-        tests = [];
-        f = e;
-      }*/
+    var e = document.getElementById("menu1");
     tests.push(new testCharge(mouseX, mouseY));
      
   }
@@ -200,7 +196,7 @@ function visualization(a) {
     for (var i = 0; i < width; i=i+20) {
       for (var j = 0; j < height; j=j+20) {
         tests.push(new testCharge(i, j));
-        tests[0].updateEtot();
+      
       }
     }
   }
@@ -209,8 +205,6 @@ function visualization(a) {
   if (a == 2) {
     tests = [];
     tests.push(new testCharge(mouseX, mouseY));
-    tests[tests.length-1].updateEtot();
-    tests[tests.length-1].Etot.normalize();
   }
 }
 
@@ -287,15 +281,15 @@ function fieldline(x, y) {
 
     if (breakerFront == false) {
       t.updateEtot();
-      t.Etot.normalize();
-      t.Etot.mult(100.0);
+     
+     
       x = x + 10*t.Etot.x/t.Etot.mag();
       y = y + 10*t.Etot.y/t.Etot.mag();
     }
     if (breakerBack == false) {
       m.updateEtot();
-      m.Etot.normalize();
-      m.Etot.mult(100.0);
+      
+      
       a = a - 10*m.Etot.x/m.Etot.mag();
       b = b - 10*m.Etot.y/m.Etot.mag();
     }
