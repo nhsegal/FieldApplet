@@ -281,15 +281,11 @@ function fieldline(x, y) {
 
     if (breakerFront == false) {
       t.updateEtot();
-     
-     
       x = x + 10*t.Etot.x/t.Etot.mag();
       y = y + 10*t.Etot.y/t.Etot.mag();
     }
     if (breakerBack == false) {
       m.updateEtot();
-      
-      
       a = a - 10*m.Etot.x/m.Etot.mag();
       b = b - 10*m.Etot.y/m.Etot.mag();
     }
