@@ -267,7 +267,7 @@ function fieldline(x, y) {
   var breakerBack = false; 
 
 //extend the list of tests in either direction
-  for (var i = 0; i <600; i++) {
+  for (var i = 0; i <140; i++) {
     if (breakerFront == false) {
       tests.push(new testCharge(x, y));
       tests[tests.length-1].updateEtot();
