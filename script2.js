@@ -1,7 +1,5 @@
 var chargeValSlider;
-var foo;
-var totalField;
-
+var f = 0; //previous visualization setting
 //arrays
 var sources = [];
 var tests = [];
@@ -28,42 +26,52 @@ function setup() {
   smooth();
   chargeArrangement(1);
   mouse = createVector(mouseX, mouseY);
-  foo = createVector(0,1);
+  
   mouseTest = new testCharge(0, 0);
   mouseArrow = new Arrow(mouse, 10, 10);
-  visualization(1);
+  visualization(0);
+  myFunction();
 
 }
 
 function draw() {
- 
   background(255);
+  chargeValSlider.mouseReleased(numCheck);
   rect(0,0,width-1,height-1);
   myFunction();
+
   for (var k = 0; k < sources.length; k++) {
     sources[k].display();
   }
   
-  if (stopped == false){
-    stroke(0);
-    console.dir(tests[0]);
-    stopped = true;
-  }
+  mouse.set(mouseX, mouseY);
+  mouseTest.pos.set(mouseX, mouseY);
+  mouseArrow.location = mouse;
+  mouseTest.updateEtot();
+  mouseArrow.angle =  mouseTest.Etot.heading();
+  mouseArrow.len = mouseTest.Etot.mag();
+  if (mouseIsPressed){
+  console.dir(mouseTest.Etot.mag());
+}
+  smooth();
+  mouseArrow.display();
 
  for (var j = 0; j < tests.length; j++) {
-  var a = new Arrow(tests[j].pos, tests[j].Etot.heading(), tests[j].Etot.mag() );
+  tests[j].updateEtot();
+  var e = document.getElementById("menu2");
+  var mag = tests[j].Etot.mag();
+  if (e.options[e.selectedIndex].value == 2){
+    mag = 10;
+  }
+  var a = new Arrow(tests[j].pos, tests[j].Etot.heading(), mag );
     if (a.len < 90) {
       a.display();
     }
   }
 
-  mouse.set(mouseX, mouseY);
-  mouseTest.pos.set(mouseX, mouseY);
-  mouseArrow.location = mouse;
-  mouseArrow.angle = mouseTest.Etot.heading();
-  mouseArrow.len = mouseTest.Etot.mag();
-  smooth();
-  mouseArrow.display();
+  
+
+
 }
 
 
@@ -152,11 +160,21 @@ function sourceCharge(posX, posY, q_) {
 function testCharge(posX, posY) {
   this.pos = createVector(posX, posY);
   this.Etot = createVector(0,0);
-  for (var i = 0; i < sources.length; i++) {
+}
+
+
+testCharge.prototype = {
+  constructor: testCharge,
+  updateEtot : function () {
+    this.Etot.set(0,0);
+    for (var i = 0; i < sources.length; i++) {
       var s = sources[i];
       r = createVector(this.pos.x - s.pos.x, this.pos.y - s.pos.y);
-      this.Etot.add(s.eField(r));
-  } 
+      this.Etot.add(s.eField(r));    
+      
+    }
+    return this.Etot; 
+  }
 }
 
 
@@ -166,8 +184,13 @@ function visualization(a) {
 
   //mouse
   if (a == 0) {
-    tests = [];
+      var e = document.getElementById("menu1");
+     /* if (f !=  0) {
+        tests = [];
+        f = e;
+      }*/
     tests.push(new testCharge(mouseX, mouseY));
+     
   }
 
   //array
@@ -177,6 +200,7 @@ function visualization(a) {
     for (var i = 0; i < width; i=i+20) {
       for (var j = 0; j < height; j=j+20) {
         tests.push(new testCharge(i, j));
+        tests[0].updateEtot();
       }
     }
   }
@@ -185,6 +209,8 @@ function visualization(a) {
   if (a == 2) {
     tests = [];
     tests.push(new testCharge(mouseX, mouseY));
+    tests[tests.length-1].updateEtot();
+    tests[tests.length-1].Etot.normalize();
   }
 }
 
@@ -192,10 +218,11 @@ function visualization(a) {
 function numCheck(){
   sliderValue = chargeValSlider.value()/10;
   var e = document.getElementById("menu2");
-  if (e.options[e.selectedIndex].value == 2)
-    {
+
+  if (e.options[e.selectedIndex].value == 2){
       tests = [];
     };
+
 }
 
 
@@ -225,6 +252,7 @@ function mouseClicked() {
   if (e.options[e.selectedIndex].value == 0){
     tests.push(new testCharge(mouseX, mouseY));
   }  
+
   if ((e.options[e.selectedIndex].value == 2) && (mouseX < width) && (mouseX > 0) && (mouseY < height) && (mouseY > 0) ){  
     tests.push(new testCharge(mouseX, mouseY));
     fieldline(mouseX, mouseY);
@@ -248,32 +276,36 @@ function fieldline(x, y) {
   for (var i = 0; i <600; i++) {
     if (breakerFront == false) {
       tests.push(new testCharge(x, y));
+      tests[tests.length-1].updateEtot();
       t = tests[tests.length-1];
     }
     if (breakerBack == false) { 
       tests.unshift(new testCharge(a, b));
+      tests[0].updateEtot();
       m = tests[0];
     }
 
     if (breakerFront == false) {
+      t.updateEtot();
       t.Etot.normalize();
-       t.Etot.mult(10);
+      t.Etot.mult(100.0);
       x = x + 10*t.Etot.x/t.Etot.mag();
       y = y + 10*t.Etot.y/t.Etot.mag();
     }
     if (breakerBack == false) {
+      m.updateEtot();
       m.Etot.normalize();
-      m.Etot.mult(10);
+      m.Etot.mult(100.0);
       a = a - 10*m.Etot.x/m.Etot.mag();
       b = b - 10*m.Etot.y/m.Etot.mag();
     }
 
     for (var e = 0; e < sources.length; e++) {
       var s = sources[e];
-      if (p5.Vector.dist(t.pos, s.pos) < 20) {
+      if (p5.Vector.dist(t.pos, s.pos) < 30) {
         breakerFront = true;
       }
-      if (p5.Vector.dist(m.pos, s.pos) < 10) {
+      if (p5.Vector.dist(m.pos, s.pos) < 20) {
         breakerBack = true;
       } 
     }
