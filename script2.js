@@ -57,15 +57,13 @@ function draw() {
     }
   }
 
- mouse.set(mouseX, mouseY);
+  mouse.set(mouseX, mouseY);
   mouseTest.pos.set(mouseX, mouseY);
   mouseArrow.location = mouse;
   mouseArrow.angle = mouseTest.Etot.heading();
   mouseArrow.len = mouseTest.Etot.mag();
   smooth();
   mouseArrow.display();
-
-
 }
 
 
@@ -74,30 +72,29 @@ function Arrow(location_, angle_, len_){
   this.angle = angle_;
   this.len = len_;
   
-  
-    this.display = function() {
-    strokeWeight(.5);
-    stroke(0);
-    smooth();
+  this.display = function() {
+  strokeWeight(.5);
+  stroke(0);
+  smooth();
     
-    push();
+  push();
     translate(this.location.x, this.location.y);
     rotate(this.angle);
     line(0, 0, this.len, 0);
     
     push();
-    translate(this.len, 0);
-    rotate(atan(PI/6));
-    line(0,0, -this.len/10, 0);
+      translate(this.len, 0);
+      rotate(atan(PI/6));
+      line(0,0, -this.len/10, 0);
     pop();
     
     push();
-    translate(this.len, 0);
-    rotate(atan(-PI/6));
-    line(0,0, -this.len/10, 0);
+      translate(this.len, 0);
+      rotate(atan(-PI/6));
+      line(0,0, -this.len/10, 0);
     pop();
     
-    pop(); 
+  pop(); 
   }
 }
 
@@ -164,24 +161,6 @@ function testCharge(posX, posY) {
 
 
 
-/*
-function testCharge(posX, posY) {
-
-  var totalField = new Object();
-
-  this.pos = createVector(posX, posY); 
-  //Given the field from each source, return the sum
-  this.Etot = function() {
-    this.temp = createVector(0, 0);
-    for (var i = 0; i < sources.length; i++) {
-      var s = sources[i];
-      r = createVector(this.pos.x - s.pos.x, this.pos.y - s.pos.y);
-      this.temp.add(s.eField(r));
-    }  
-  return this.temp;
-  }
-  foo = this.Etot();
-}*/
 
 function visualization(a) {
 
@@ -273,11 +252,13 @@ function fieldline(x, y) {
 
     if (breakerFront == false) {
       t.Etot.normalize();
+       t.Etot.mult(10);
       x = x + 10*t.Etot.x/t.Etot.mag();
       y = y + 10*t.Etot.y/t.Etot.mag();
     }
     if (breakerBack == false) {
       m.Etot.normalize();
+      m.Etot.mult(10);
       a = a - 10*m.Etot.x/m.Etot.mag();
       b = b - 10*m.Etot.y/m.Etot.mag();
     }
