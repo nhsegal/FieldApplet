@@ -18,12 +18,10 @@ function setup() {
   cnv.parent("myContainer");
 
 
-  chargeValSlider = createSlider( 3, 17, 9);
+  chargeValSlider = createSlider( -20, 20, 5);
   chargeValSlider.parent("sliderPos");
   chargeValSlider.size(240);  
-
-
-
+  chargeValSlider.mouseReleased(numCheck);
 
   smooth();
   chargeArrangement(1);
@@ -34,8 +32,10 @@ function setup() {
 }
 
 function draw() {
-  background(200);
-  //myFunction();
+  //chargeValSlider.mouseReleased(numCheck);
+  background(255);
+  rect(0,0,width-1,height-1);
+  myFunction();
   for (var k = 0; k < sources.length; k++) {
     sources[k].display();
   }
@@ -43,7 +43,7 @@ function draw() {
   for (var j = 0; j < tests.length; j++) {
     stroke(0);
     var a = new Arrow(tests[j].pos, tests[j].Etot(sources).heading(), tests[j].Etot(sources).mag() );
-    if (a.len < 120) {
+    if (a.len < 90) {
       a.display();
     }
   }
@@ -183,6 +183,12 @@ function visualization(a) {
     tests.push(new testCharge(mouseX, mouseY));
   }
 }
+
+
+function numCheck(){
+  sliderValue = chargeValSlider.value()/5;
+}
+
 
 
 function myFunction() {
