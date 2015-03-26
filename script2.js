@@ -1,4 +1,6 @@
 var chargeValSlider;
+var foo;
+var totalField;
 
 //arrays
 var sources = [];
@@ -12,11 +14,11 @@ var mouse; //PVector
 var r; //PVector
 
 var sliderValue = 1;
+ var stopped = false;
 
 function setup() {
   var cnv = createCanvas(1000, 400);
   cnv.parent("myContainer");
-
 
   chargeValSlider = createSlider( -40, 40, 10);
   chargeValSlider.parent("sliderPos");
@@ -26,9 +28,11 @@ function setup() {
   smooth();
   chargeArrangement(1);
   mouse = createVector(mouseX, mouseY);
+  foo = createVector(0,1);
   mouseTest = new testCharge(0, 0);
   mouseArrow = new Arrow(mouse, 10, 10);
   visualization(1);
+
 }
 
 function draw() {
@@ -39,20 +43,25 @@ function draw() {
   for (var k = 0; k < sources.length; k++) {
     sources[k].display();
   }
-
-  for (var j = 0; j < tests.length; j++) {
+  
+  if (stopped == false){
     stroke(0);
-    var a = new Arrow(tests[j].pos, tests[j].Etot(sources).heading(), tests[j].Etot(sources).mag() );
+    console.dir(tests[0]);
+    stopped = true;
+  }
+
+ for (var j = 0; j < tests.length; j++) {
+  var a = new Arrow(tests[j].pos, tests[j].Etot.heading(), tests[j].Etot.mag() );
     if (a.len < 90) {
       a.display();
     }
   }
 
-  mouse.set(mouseX, mouseY);
+ mouse.set(mouseX, mouseY);
   mouseTest.pos.set(mouseX, mouseY);
   mouseArrow.location = mouse;
-  mouseArrow.angle = mouseTest.Etot(sources).heading();
-  mouseArrow.len = mouseTest.Etot(sources).mag();
+  mouseArrow.angle = mouseTest.Etot.heading();
+  mouseArrow.len = mouseTest.Etot.mag();
   smooth();
   mouseArrow.display();
 
@@ -143,9 +152,24 @@ function sourceCharge(posX, posY, q_) {
     }
 }
 
-
 function testCharge(posX, posY) {
   this.pos = createVector(posX, posY);
+  this.Etot = createVector(0,0);
+  for (var i = 0; i < sources.length; i++) {
+      var s = sources[i];
+      r = createVector(this.pos.x - s.pos.x, this.pos.y - s.pos.y);
+      this.Etot.add(s.eField(r));
+  } 
+}
+
+
+
+/*
+function testCharge(posX, posY) {
+
+  var totalField = new Object();
+
+  this.pos = createVector(posX, posY); 
   //Given the field from each source, return the sum
   this.Etot = function() {
     this.temp = createVector(0, 0);
@@ -153,10 +177,11 @@ function testCharge(posX, posY) {
       var s = sources[i];
       r = createVector(this.pos.x - s.pos.x, this.pos.y - s.pos.y);
       this.temp.add(s.eField(r));
-    }
-    return this.temp;
+    }  
+  return this.temp;
   }
-}
+  foo = this.Etot();
+}*/
 
 function visualization(a) {
 
@@ -211,25 +236,60 @@ function resetFunction() {
 
 
 
-
-
-
 function mouseClicked() {
   var e = document.getElementById("menu2");
   if (e.options[e.selectedIndex].value == 0){
     tests.push(new testCharge(mouseX, mouseY));
-  }    
+  }  
+  if (e.options[e.selectedIndex].value == 2){  
+    tests.push(new testCharge(mouseX, mouseY));
+    fieldline(mouseX, mouseY);
+  } 
+
+
   return false;
 } 
-/*
-  if (d2.getValue() == 2) {
-    if (mouseButton == LEFT) {
-      tests.add(new testCharge(mouseX, mouseY));
-      fieldline(mouseX, mouseY);
-    } 
-    else if (mouseButton == RIGHT) {
-      tests.clear();
-      tests.add(new testCharge(mouseX, mouseY));
+
+
+
+function fieldline(x, y) {
+  var a = x;
+  var b = y;
+  var t = new testCharge(x, y);
+  var m = new testCharge(a, b);
+  var breakerFront = false;
+  var breakerBack = false; 
+
+//extend the list of tests in either direction
+  for (var i = 0; i <600; i++) {
+    if (breakerFront == false) {
+      tests.push(new testCharge(x, y));
+      t = tests[tests.length-1];
+    }
+    if (breakerBack == false) { 
+      tests.unshift(new testCharge(a, b));
+      m = tests[0];
+    }
+
+    if (breakerFront == false) {
+      t.Etot.normalize();
+      x = x + 10*t.Etot.x/t.Etot.mag();
+      y = y + 10*t.Etot.y/t.Etot.mag();
+    }
+    if (breakerBack == false) {
+      m.Etot.normalize();
+      a = a - 10*m.Etot.x/m.Etot.mag();
+      b = b - 10*m.Etot.y/m.Etot.mag();
+    }
+
+    for (var e = 0; e < sources.length; e++) {
+      var s = sources[e];
+      if (p5.Vector.dist(t.pos, s.pos) < 20) {
+        breakerFront = true;
+      }
+      if (p5.Vector.dist(m.pos, s.pos) < 10) {
+        breakerBack = true;
+      } 
     }
   }
-}*/
+}
