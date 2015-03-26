@@ -18,7 +18,7 @@ function setup() {
   cnv.parent("myContainer");
 
 
-  chargeValSlider = createSlider( -20, 20, 5);
+  chargeValSlider = createSlider( -40, 40, 10);
   chargeValSlider.parent("sliderPos");
   chargeValSlider.size(240);  
   chargeValSlider.mouseReleased(numCheck);
@@ -186,7 +186,7 @@ function visualization(a) {
 
 
 function numCheck(){
-  sliderValue = chargeValSlider.value()/5;
+  sliderValue = chargeValSlider.value()/10;
 }
 
 
@@ -195,3 +195,41 @@ function myFunction() {
   var e = document.getElementById("menu1");
   chargeArrangement(e.options[e.selectedIndex].value);
 }
+
+function myFunction2() {
+  var e = document.getElementById("menu2");
+  visualization(e.options[e.selectedIndex].value);
+}
+
+function resetFunction() {
+  var e = document.getElementById("menu2");
+  if (e.options[e.selectedIndex].value == 0){
+    tests = [];
+  }    
+
+}
+
+
+
+
+
+
+function mouseClicked() {
+  var e = document.getElementById("menu2");
+  if (e.options[e.selectedIndex].value == 0){
+    tests.push(new testCharge(mouseX, mouseY));
+  }    
+  return false;
+} 
+/*
+  if (d2.getValue() == 2) {
+    if (mouseButton == LEFT) {
+      tests.add(new testCharge(mouseX, mouseY));
+      fieldline(mouseX, mouseY);
+    } 
+    else if (mouseButton == RIGHT) {
+      tests.clear();
+      tests.add(new testCharge(mouseX, mouseY));
+    }
+  }
+}*/
