@@ -179,9 +179,7 @@ function visualization(a) {
 
   //mouse
   if (a == 0) {
-    //var e = document.getElementById("menuChargeArr");
     tests.push(new testCharge(mouseX, mouseY));
-     
   }
 
   //array
@@ -190,8 +188,7 @@ function visualization(a) {
     tests.push(new testCharge(mouseX, mouseY));
     for (var i = 0; i < width; i=i+20) {
       for (var j = 0; j < height; j=j+20) {
-        tests.push(new testCharge(i, j));
-      
+        tests.push(new testCharge(i, j));   
       }
     }
   }
@@ -215,18 +212,18 @@ function numCheck(){
 }
 
 function getChargeArrangement() {
-  var e = document.getElementById("menuChargeArr");
-  chargeArrangement(e.options[e.selectedIndex].value);
+  chargeArr = document.getElementById("menuChargeArr");
+  chargeArrangement(chargeArr.options[chargeArr.selectedIndex].value);
 }
 
 function getVis() {
-  var e = document.getElementById("menuVis");
-  visualization(e.options[e.selectedIndex].value);
+  visVal = document.getElementById("menuVis");
+  visualization(visVal.options[visVal.selectedIndex].value);
 }
 
 function resetFunction() {
-  var e = document.getElementById("menuVis");
-  if (e.options[e.selectedIndex].value == 0 || e.options[e.selectedIndex].value == 2){
+  visVal = document.getElementById("menuVis");
+  if (visVal.options[visVal.selectedIndex].value == 0 || visVal.options[visVal.selectedIndex].value == 2){
     tests = [];
   }    
 
@@ -235,12 +232,12 @@ function resetFunction() {
 
 
 function mouseClicked() {
-  var e = document.getElementById("menuVis");
-  if (e.options[e.selectedIndex].value == 0){
+  visVal = document.getElementById("menuVis");
+  if (visVal.options[visVal.selectedIndex].value == 0){
     tests.push(new testCharge(mouseX, mouseY));
   }  
 
-  if ((e.options[e.selectedIndex].value == 2) && (mouseX < width) && (mouseX > 0) && (mouseY < height) && (mouseY > 0) ){  
+  if ((visVal.options[visVal.selectedIndex].value == 2) && (mouseX < width) && (mouseX > 0) && (mouseY < height) && (mouseY > 0) ){  
     tests.push(new testCharge(mouseX, mouseY));
     fieldline(mouseX, mouseY);
   } 
@@ -260,7 +257,7 @@ function fieldline(x, y) {
   var breakerBack = false; 
 
 //extend the list of tests in either direction
-  for (var i = 0; i <160; i++) {
+  for (var i = 0; i <360; i++) {
     if (breakerFront == false) {
       tests.push(new testCharge(x, y));
       tests[tests.length-1].updateEtot();
