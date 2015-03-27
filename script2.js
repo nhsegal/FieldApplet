@@ -203,9 +203,8 @@ function visualization(a) {
 
 function numCheck(){
   sliderValue = chargeValSlider.value()/10;
-  var e = document.getElementById("menuVis");
-
-  if (e.options[e.selectedIndex].value == 2){
+  visVal = document.getElementById("menuVis");
+  if (visVal.options[visVal.selectedIndex].value == 2){
       tests = [];
     };
 
@@ -280,7 +279,7 @@ function fieldline(x, y) {
       b = b - 10*m.Etot.y/m.Etot.mag();
     }
 
-    for (var e = 0; e < sources.length; e++) {
+    for (var e = sources.length-1; e >= 0; e--) {
       var s = sources[e];
       if (p5.Vector.dist(t.pos, s.pos) < 30) {
         breakerFront = true;
