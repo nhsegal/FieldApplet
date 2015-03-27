@@ -107,15 +107,12 @@ function chargeArrangement(a) {
     sources = [];
     sources.push(new sourceCharge(width/2, height/2, sliderValue));
   }
-
   //dipole
   if (a == 1) {
     sources = [];
     sources.push(new sourceCharge(width/3, height/2,  sliderValue));
     sources.push(new sourceCharge(2*width/3, height/2, 1));
   }
-
-
   if (a == 2) {
     sources = [];
     sources.push(new sourceCharge(width/2 - 100, height/2 -100,  -sliderValue/2));
@@ -123,7 +120,6 @@ function chargeArrangement(a) {
     sources.push(new sourceCharge(width/2 - 100, height/2 + 100,  sliderValue/2));
     sources.push(new sourceCharge(width/2 + 100, height/2 +100, -sliderValue/2));
   }
-
   if (a == 3) {
     sources = [];
     for (var i = -12; i < 12; i++) {
@@ -137,13 +133,11 @@ function chargeArrangement(a) {
 function sourceCharge(posX, posY, q_) {
    this.pos = createVector(posX, posY);
     this.q = q_;
-
     this.display = function() {
       fill(125 + this.q*720, 0, 125 - 720*this.q);
       noStroke();
       ellipse(this.pos.x, this.pos.y, 15, 15);
     }
-
     this.eField = function(r) {
       this.E = p5.Vector.mult(r, pow(r.mag(), -2));  // E = kq/r
       this.E.mult(this.q);
@@ -156,7 +150,6 @@ function testCharge(posX, posY) {
   this.pos = createVector(posX, posY);
   this.Etot = createVector(0,0);
 }
-
 
 testCharge.prototype = {
   constructor: testCharge,
@@ -173,15 +166,11 @@ testCharge.prototype = {
 }
 
 
-
-
 function visualization(a) {
-
   //mouse
   if (a == 0) {
     tests.push(new testCharge(mouseX, mouseY));
   }
-
   //array
   if (a == 1) {
     tests = [];
@@ -192,7 +181,6 @@ function visualization(a) {
       }
     }
   }
-
   //lines
   if (a == 2) {
     tests = [];
@@ -207,25 +195,20 @@ function numCheck(){
   if (visVal.options[visVal.selectedIndex].value == 2){
       tests = [];
     };
-
 }
-
 function getChargeArrangement() {
   chargeArr = document.getElementById("menuChargeArr");
   chargeArrangement(chargeArr.options[chargeArr.selectedIndex].value);
 }
-
 function getVis() {
   visVal = document.getElementById("menuVis");
   visualization(visVal.options[visVal.selectedIndex].value);
 }
-
 function resetFunction() {
   visVal = document.getElementById("menuVis");
   if (visVal.options[visVal.selectedIndex].value == 0 || visVal.options[visVal.selectedIndex].value == 2){
     tests = [];
-  }    
-
+  }   
 }
 
 
@@ -235,13 +218,10 @@ function mouseClicked() {
   if (visVal.options[visVal.selectedIndex].value == 0){
     tests.push(new testCharge(mouseX, mouseY));
   }  
-
   if ((visVal.options[visVal.selectedIndex].value == 2) && (mouseX < width) && (mouseX > 0) && (mouseY < height) && (mouseY > 0) ){  
     tests.push(new testCharge(mouseX, mouseY));
     fieldline(mouseX, mouseY);
   } 
-
-
   return false;
 } 
 
