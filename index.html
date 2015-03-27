@@ -3,61 +3,41 @@
 
 <head>
   <title>An Electric Field Applet</title>
-  
-  <link type="text/css" rel="stylesheet" href="https://dl.dropboxusercontent.com/u/16897511/LeastA/empty-example/style.css"/>
-  <script language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.3.14/p5.js"></script>
+  <link type="text/css" rel="stylesheet" href="style.css">
+  <script language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.2/p5.min.js"></script>
   <script language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.3.14/addons/p5.dom.js"></script>
-  <!--<script language="javascript" src="../addons/p5.sound.js"></script>-->
-  <script language="javascript" src="script2.js"></script>
-  <!-- this line removes any default padding and style. you might only need one of these values set. -->
- 
+  <script language="javascript" src="script2.js"></script> 
 </head>
 
 <body>
-
 <p>
 The applet below shows several ways to visualize the electric field produced by a group of charges.
 The slider alters the magnitude and sign of some of the charges in the simulation window.
 If the visualization mode is set to "Mouse Makes Field Lines," changing the slider value clears the field lines.
 If the visualization mode is set to "Mouse Drops Field Vectors" or "Mouse Makes Field Lines," double-clicking will clear all the vectors.
 </p>
-
 <hr>
 <p>
 Charge Arrangement: 
-
-<select autofocus id="menu1" onchange="myFunction();myFunction2()">
+<select autofocus id="menuChargeArr" onchange="getChargeArrangement();getVis()">
   <option value=0>One Charge</option>
   <option value=1 selected="selected">Two Charges</option>
   <option value=2>Four Charges</option>
   <option value=3>Two Charged Plates</option>
 </select>
-
 </p>
+
 <p>
 Visualization Method:
-<select autofocus id="menu2" onchange="tests=[];myFunction();myFunction2()">
+<select autofocus id="menuVis" onchange="tests=[];getChargeArrangement();getVis()">
   <option value=0  selected="selected">Mouse Drops Field Vectors</option>
   <option value=1>Vector Array</option>
   <option value=2>Mouse Makes Field Lines</option>
 </select>
 
-
-
-
-<span id="sliderPos" onchange= "myFunction();myFunction2()" >Alter the Charges:</span>
-
-
-
-
+<span id="sliderPos" onchange= "getChargeArrangement();getVis()" >Alter the Charges:</span>
 </p>
 <div id="myContainer" ondblclick="resetFunction()"></div>
-
-
-
-<div id="myContainer2"></div>
-
-
 </body>
  
 </html>

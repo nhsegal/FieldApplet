@@ -1,5 +1,5 @@
 var chargeValSlider;
- //previous visualization setting
+
 //arrays
 var sources = [];
 var tests = [];
@@ -12,7 +12,9 @@ var mouse; //PVector
 var r; //PVector
 
 var sliderValue = 1;
- var stopped = false;
+var stopped = false;
+var chargeArr = 0; //charge arrangment
+var visVal = 0;
 
 function setup() {
   var cnv = createCanvas(1000, 400);
@@ -21,16 +23,15 @@ function setup() {
   chargeValSlider = createSlider( -40, 40, 10);
   chargeValSlider.parent("sliderPos");
   chargeValSlider.size(240);  
-  chargeValSlider.mouseReleased(numCheck);
+  chargeValSlider.mousePressed(numCheck);
 
   smooth();
   chargeArrangement(1);
   mouse = createVector(mouseX, mouseY);
-  
   mouseTest = new testCharge(0, 0);
   mouseArrow = new Arrow(mouse, 10, 10);
   visualization(0);
-  myFunction();
+  getChargeArrangement();
 
 }
 
@@ -38,8 +39,8 @@ function draw() {
   background(255);
   chargeValSlider.mouseReleased(numCheck);
   rect(0,0,width-1,height-1);
-  myFunction();
-
+  getChargeArrangement();
+  
   for (var k = 0; k < sources.length; k++) {
     sources[k].display();
   }
@@ -50,17 +51,15 @@ function draw() {
   mouseTest.updateEtot();
   mouseArrow.angle =  mouseTest.Etot.heading();
   mouseArrow.len = mouseTest.Etot.mag();
-  if (mouseIsPressed){
-  console.dir(mouseTest.Etot.mag());
-}
   smooth();
   mouseArrow.display();
+  visVal = document.getElementById("menuVis");
 
  for (var j = 0; j < tests.length; j++) {
   tests[j].updateEtot();
-  var e = document.getElementById("menu2");
+  //var e = document.getElementById("menuVis");
   var mag = tests[j].Etot.mag();
-  if (e.options[e.selectedIndex].value == 2){
+  if (visVal.options[visVal.selectedIndex].value == 2){
     mag = 10;
   }
   var a = new Arrow(tests[j].pos, tests[j].Etot.heading(), mag );
@@ -68,10 +67,6 @@ function draw() {
       a.display();
     }
   }
-
-  
-
-
 }
 
 
@@ -184,7 +179,7 @@ function visualization(a) {
 
   //mouse
   if (a == 0) {
-    var e = document.getElementById("menu1");
+    //var e = document.getElementById("menuChargeArr");
     tests.push(new testCharge(mouseX, mouseY));
      
   }
@@ -211,7 +206,7 @@ function visualization(a) {
 
 function numCheck(){
   sliderValue = chargeValSlider.value()/10;
-  var e = document.getElementById("menu2");
+  var e = document.getElementById("menuVis");
 
   if (e.options[e.selectedIndex].value == 2){
       tests = [];
@@ -219,20 +214,18 @@ function numCheck(){
 
 }
 
-
-
-function myFunction() {
-  var e = document.getElementById("menu1");
+function getChargeArrangement() {
+  var e = document.getElementById("menuChargeArr");
   chargeArrangement(e.options[e.selectedIndex].value);
 }
 
-function myFunction2() {
-  var e = document.getElementById("menu2");
+function getVis() {
+  var e = document.getElementById("menuVis");
   visualization(e.options[e.selectedIndex].value);
 }
 
 function resetFunction() {
-  var e = document.getElementById("menu2");
+  var e = document.getElementById("menuVis");
   if (e.options[e.selectedIndex].value == 0 || e.options[e.selectedIndex].value == 2){
     tests = [];
   }    
@@ -242,7 +235,7 @@ function resetFunction() {
 
 
 function mouseClicked() {
-  var e = document.getElementById("menu2");
+  var e = document.getElementById("menuVis");
   if (e.options[e.selectedIndex].value == 0){
     tests.push(new testCharge(mouseX, mouseY));
   }  
