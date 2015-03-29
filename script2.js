@@ -14,7 +14,8 @@ var r; //PVector
 var sliderValue = 1;
 var stopped = false;
 var chargeArr = 0; //charge arrangment
-var visVal = 0;
+visVal = document.getElementById("menuVis");
+var visValNum =0;
 
 function setup() {
   var cnv = createCanvas(1000, 400);
@@ -37,6 +38,8 @@ function setup() {
 
 function draw() {
   background(255);
+  visVal = document.getElementById("menuVis");
+  visValNum = visVal.options[visVal.selectedIndex].value;
   chargeValSlider.mouseReleased(numCheck);
   rect(0,0,width-1,height-1);
   getChargeArrangement();
@@ -51,20 +54,21 @@ function draw() {
   mouseTest.updateEtot();
   mouseArrow.angle =  mouseTest.Etot.heading();
   mouseArrow.len = mouseTest.Etot.mag();
-  smooth();
   mouseArrow.display();
-  visVal = document.getElementById("menuVis");
 
- for (var j = 0; j < tests.length; j++) {
-  tests[j].updateEtot();
-  //var e = document.getElementById("menuVis");
-  var mag = tests[j].Etot.mag();
-  if (visVal.options[visVal.selectedIndex].value == 2){
-    mag = 10;
-  }
-  var a = new Arrow(tests[j].pos, tests[j].Etot.heading(), mag );
-    if (a.len < 90) {
-      a.display();
+
+  for (var j = tests.length-1; j >=0; j--) {
+    tests[j].updateEtot(); 
+    if (visValNum == 2){
+      line(tests[j].pos.x, tests[j].pos.y, tests[j].pos.x + 10*tests[j].Etot.x, tests[j].pos.y + 10*tests[j].Etot.y);
+    }
+
+    else{
+      var mag = tests[j].Etot.mag();
+      var a = new Arrow(tests[j].pos, tests[j].Etot.heading(), mag );
+      if (a.len < 90) {
+        a.display();
+      }
     }
   }
 }
@@ -78,7 +82,7 @@ function Arrow(location_, angle_, len_){
   this.display = function() {
   strokeWeight(.5);
   stroke(0);
-  smooth();
+  //smooth();
     
   push();
     translate(this.location.x, this.location.y);
@@ -161,6 +165,10 @@ testCharge.prototype = {
       this.Etot.add(s.eField(r));    
       
     }
+    if ((visValNum == 2) && (this.pos != mouseTest.pos)) {
+      this.Etot.normalize();
+    }
+
     return this.Etot; 
   }
 }
