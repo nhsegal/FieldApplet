@@ -43,7 +43,6 @@ function draw() {
   chargeValSlider.mouseReleased(numCheck);
   rect(0,0,width-1,height-1);
   getChargeArrangement();
-  
   for (var k = 0; k < sources.length; k++) {
     sources[k].display();
   }
@@ -78,12 +77,11 @@ function Arrow(location_, angle_, len_){
   this.location = location_;
   this.angle = angle_;
   this.len = len_;
-  
-  this.display = function() {
+}
+
+Arrow.prototype.display = function(){
   strokeWeight(.5);
   stroke(0);
-  //smooth();
-    
   push();
     translate(this.location.x, this.location.y);
     rotate(this.angle);
@@ -100,9 +98,8 @@ function Arrow(location_, angle_, len_){
       rotate(atan(-PI/6));
       line(0,0, -this.len/10, 0);
     pop();
-    
   pop(); 
-  }
+  
 }
 
 
@@ -135,19 +132,21 @@ function chargeArrangement(a) {
 
 
 function sourceCharge(posX, posY, q_) {
-   this.pos = createVector(posX, posY);
-    this.q = q_;
-    this.display = function() {
-      fill(125 + this.q*720, 0, 125 - 720*this.q);
-      noStroke();
-      ellipse(this.pos.x, this.pos.y, 15, 15);
-    }
-    this.eField = function(r) {
-      this.E = p5.Vector.mult(r, pow(r.mag(), -2));  // E = kq/r
-      this.E.mult(this.q);
-      this.E.mult(1500);
-      return this.E;
-    }
+  this.pos = createVector(posX, posY);
+  this.q = q_; 
+}
+
+sourceCharge.prototype.display = function() {
+  fill(125 + this.q*720, 0, 125 - 720*this.q);
+  noStroke();
+  ellipse(this.pos.x, this.pos.y, 15, 15);
+}
+
+sourceCharge.prototype.eField = function(r) {
+  this.E = p5.Vector.mult(r, pow(r.mag(), -2));  // E = kq/r
+  this.E.mult(this.q);
+  this.E.mult(1500);
+  return this.E;
 }
 
 function testCharge(posX, posY) {
@@ -168,7 +167,6 @@ testCharge.prototype = {
     if ((visValNum == 2) && (this.pos != mouseTest.pos)) {
       this.Etot.normalize();
     }
-
     return this.Etot; 
   }
 }
