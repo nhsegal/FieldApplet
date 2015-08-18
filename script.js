@@ -43,6 +43,7 @@ function draw() {
   chargeValSlider.mouseReleased(numCheck);
   rect(0,0,width-1,height-1);
   getChargeArrangement();
+
   for (var k = 0; k < sources.length; k++) {
     sources[k].display();
   }
@@ -54,7 +55,6 @@ function draw() {
   mouseArrow.angle =  mouseTest.Etot.heading();
   mouseArrow.len = mouseTest.Etot.mag();
   mouseArrow.display();
-
 
   for (var j = tests.length-1; j >=0; j--) {
     tests[j].updateEtot(); 
@@ -102,7 +102,6 @@ Arrow.prototype.display = function(){
   
 }
 
-
 function chargeArrangement(a) {
   if (a == 0) {
     sources = [];
@@ -129,7 +128,6 @@ function chargeArrangement(a) {
     }
   }
 }
-
 
 function sourceCharge(posX, posY, q_) {
   this.pos = createVector(posX, posY);
@@ -256,21 +254,21 @@ function fieldline(x, y) {
 
     if (breakerFront == false) {
       t.updateEtot();
-      x = x + 10*t.Etot.x/t.Etot.mag();
-      y = y + 10*t.Etot.y/t.Etot.mag();
+      x = x + 3*t.Etot.x/t.Etot.mag();
+      y = y + 3*t.Etot.y/t.Etot.mag();
     }
     if (breakerBack == false) {
       m.updateEtot();
-      a = a - 10*m.Etot.x/m.Etot.mag();
-      b = b - 10*m.Etot.y/m.Etot.mag();
+      a = a - 3*m.Etot.x/m.Etot.mag();
+      b = b - 3*m.Etot.y/m.Etot.mag();
     }
 
     for (var e = sources.length-1; e >= 0; e--) {
       var s = sources[e];
-      if (p5.Vector.dist(t.pos, s.pos) < 30) {
+      if (p5.Vector.dist(t.pos, s.pos) < 5) {
         breakerFront = true;
       }
-      if (p5.Vector.dist(m.pos, s.pos) < 20) {
+      if (p5.Vector.dist(m.pos, s.pos) < 5) {
         breakerBack = true;
       } 
     }
