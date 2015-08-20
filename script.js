@@ -4,6 +4,7 @@ var chargeValSlider;
 var sources = [];
 var tests = [];
 var arrows = [];
+var lineEnds = [];
 
 var fieldArrow, a, mouseArrow; //Arrows
 var mouseTest; //testCharge
@@ -197,7 +198,7 @@ function numCheck(){
   sliderValue = chargeValSlider.value()/10;
   visVal = document.getElementById("menuVis");
   if (visVal.options[visVal.selectedIndex].value == 2){
-      tests = [];
+      //tests = [];
     };
 }
 function getChargeArrangement() {
@@ -210,7 +211,7 @@ function getVis() {
 }
 function resetFunction() {
   visVal = document.getElementById("menuVis");
-  if (visVal.options[visVal.selectedIndex].value == 0 || visVal.options[visVal.selectedIndex].value == 2){
+  if (visVal.options[visVal.selectedIndex].value == 0){ //|| visVal.options[visVal.selectedIndex].value == 2){
     tests = [];
   }   
 }
@@ -228,7 +229,6 @@ function mouseClicked() {
   } 
   return false;
 } 
-
 
 
 function fieldline(x, y) {
@@ -265,12 +265,21 @@ function fieldline(x, y) {
 
     for (var e = sources.length-1; e >= 0; e--) {
       var s = sources[e];
-      if (p5.Vector.dist(t.pos, s.pos) < 5) {
+      if (p5.Vector.dist(t.pos, s.pos) < 10) {
         breakerFront = true;
       }
       if (p5.Vector.dist(m.pos, s.pos) < 5) {
+       
         breakerBack = true;
       } 
     }
+  }
+  lineEnds.push(new testCharge(m.pos.x, m.pos.y));
+}
+
+
+function updateLine(){
+  for (var i=0; i<lineEnds.length; i++){
+    fieldline(lineEnds[i].pos.x, lineEnds[i].pos.y);
   }
 }
